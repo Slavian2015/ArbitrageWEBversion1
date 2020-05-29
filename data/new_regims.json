@@ -1,0 +1,29 @@
+{
+  "1":
+  {"birga1": "live",
+    "birga2": "alfa",
+    "val1": "USD",
+    "val2": "PZM",
+    "val3": "USD",
+    "birga1_com": 0.2,
+    "birga2_com": 0.06,
+    "profit": 3.0,
+    "order": 0.2,
+    "per": 99.5,
+    "avtomat": "off" },
+
+
+  "2":
+  { "birga1": "live",
+    "birga2": "hot",
+    "val1": "BTC",
+    "val2": "PZM",
+    "val3": "BTC",
+    "birga1_com": 0.2,
+    "birga2_com": 0.06,
+    "profit": 1.0,
+    "order": 0.2,
+    "per": 99.5,
+    "avtomat": "off"
+}
+}
