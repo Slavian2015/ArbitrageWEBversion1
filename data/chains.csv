@@ -1,1 +1,2 @@
-TIME,birga_x,birga_y,rates_x,rates_y,valin_x,valin_y,valout_y,volume_x,volume_y,start,step,back,profit,perc,volume,timer
+TIME,birga_x,birga_y,rates_x,rates_y,valin_x,valin_y,valout_y,volume_x,volume_y,start,step,back,profit,perc,volume,timer,regim
+15:45:29,alfa,hot,0.0257,0.02630302,USD,PZM,USDT,18000.0,1403.92,100.0,3884.059276959061,101.978926774845,1.978926774844993,1.978926774844993,1396.9004,0.796875,9

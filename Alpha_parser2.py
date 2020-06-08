@@ -24,7 +24,7 @@ pd.set_option('max_colwidth', -1)
 
 
 main_path_data = os.path.abspath("./data")
-f = open(main_path_data + "\\regim.json")
+f = open(main_path_data + "\\new_regims.json")
 regim = json.load(f)
 
 

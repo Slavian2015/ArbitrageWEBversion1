@@ -199,8 +199,8 @@ def restart():
 
         #################################      REGIMS      ##########################################
 
-        if os.path.isfile(main_path_data + "\\regim.json"):
-            f = open(main_path_data + "\\regim.json")
+        if os.path.isfile(main_path_data + "\\new_regims.json"):
+            f = open(main_path_data + "\\new_regims.json")
             regim = json.load(f)
             pass
         else:
@@ -216,7 +216,7 @@ def restart():
                          "per": ""}}
             ooo = json.dumps(regim, indent=4)
             # Writing to sample.json
-            with open(main_path_data + "\\regim.json", "w") as outfile:
+            with open(main_path_data + "\\new_regims.json", "w") as outfile:
                 outfile.write(ooo)
                 outfile.close()
                 pass

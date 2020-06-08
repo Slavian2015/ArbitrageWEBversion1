@@ -32,7 +32,7 @@ def reg():
 
     #################################      REGIMS      ##########################################
 
-    if os.path.isfile(main_path_data + "\\regim.json"):
+    if os.path.isfile(main_path_data + "\\new_regims.json"):
         pass
     else:
         dictionary = {"1": {"option": "off",
@@ -48,7 +48,7 @@ def reg():
         regim = json.dumps(dictionary, indent=4)
 
         # Writing to sample.json
-        with open(main_path_data + "\\regim.json", "w") as outfile:
+        with open(main_path_data + "\\new_regims.json", "w") as outfile:
             outfile.write(regim)
             outfile.close()
             pass
