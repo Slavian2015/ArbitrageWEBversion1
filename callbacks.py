@@ -8,19 +8,22 @@ import pandas as pd
 import base64
 import MAIN_TAB
 import refBalance
-import dash_design_kit as ddk
+import dash_html_components as html
+# import dash_design_kit as ddk
 import layouts
-
-import Orders
-import datetime as dt
-
-from decimal import ROUND_UP,Context
+import dash_audio_components
+#
+# import Orders
+# import datetime as dt
+#
+# from decimal import ROUND_UP,Context
 
 
 
 dash_app.config['suppress_callback_exceptions'] = True
+# dash_app.config['serve_locally'] = True
 main_path_data = os.path.abspath("./data")
-
+dash_app.scripts.config.serve_locally = True
 # Encode the local sound file.
 sound_filename = (main_path_data + "\\signal.mp3")  # replace with your own .mp3 file
 encoded_sound = base64.b64encode(open(sound_filename, 'rb').read())
@@ -32,6 +35,7 @@ def refresh(app: dash.Dash):
     @app.callback([Output('table', 'data'),
                    Output('valuta', 'data'),
                    Output('table_all', 'data'),
+                   Output('placeholder1', 'children'),
                    ],
                   [
                       Input('interval', 'n_intervals'),
@@ -57,14 +61,18 @@ def refresh(app: dash.Dash):
         # print('n_clicks :',  n_clicks)
 
         valuta = pd.read_csv(main_path_data + "\\balance.csv")
-        vilki = pd.read_csv(main_path_data + "\\vilki.csv")
+        try:
+            vilki = pd.read_csv(main_path_data + "\\vilki.csv")
+        except Exception as e:
+            vilki = pd.read_csv(main_path_data + "\\vilki.csv")
+            pass
         final2 = pd.read_csv(main_path_data + "\\all_data.csv")
 
-        print(vilki)
+        # print(vilki)
 
         vilki['profit'] = vilki['profit'].map('{:,.2f}%'.format)
-        vilki['kurs1'] = vilki['kurs1'].map('{:,.6f}'.format)
-        vilki['kurs2'] = vilki['kurs2'].map('{:,.6f}'.format)
+        vilki['kurs1'] = vilki['kurs1'].map('{:,.7f}'.format)
+        vilki['kurs2'] = vilki['kurs2'].map('{:,.7f}'.format)
         vilki['Vol1'] = vilki['Vol1'].map('{:,.6f}'.format)
         vilki['Vol2'] = vilki['Vol2'].map('{:,.6f}'.format)
         vilki['Vol3'] = vilki['Vol3'].map('{:,.6f}'.format)
@@ -75,15 +83,25 @@ def refresh(app: dash.Dash):
         valuta['hot'] = valuta['hot'].map('{:,.6f}'.format)
         valuta['Summa'] = valuta['Summa'].map('{:,.6f}'.format)
 
-        final2['profit'] = final2['profit'].map('{:,.2f}%'.format)
+        final2['profit'] = final2['profit'].map('{:,.6f}'.format)
         final2['start'] = final2['start'].map('{:,.6f}'.format)
         final2['step'] = final2['step'].map('{:,.6f}'.format)
         final2['back'] = final2['back'].map('{:,.6f}'.format)
+        final2['rates_x'] = final2['rates_x'].map('{:,.6f}'.format)
+        final2['rates_y'] = final2['rates_y'].map('{:,.6f}'.format)
+        final2['perc'] = final2['perc'].map('{:,.2f}%'.format)
+
 
 
         if button_id[0] == 'interval':
             print(" ##########   REFRESH  ################")
-            return vilki.to_dict('records'),valuta.to_dict('records'),final2.to_dict('records')
+            if float(vilki.iloc[0]['kurs1']) > 0:
+                print(" ##########   1  ################")
+                return vilki.to_dict('records'),valuta.to_dict('records'),final2.to_dict('records'), layouts.sound(0)
+            else:
+                print(" ##########   2  ################")
+                return vilki.to_dict('records'), valuta.to_dict('records'), final2.to_dict('records'), layouts.sound(1)
+
         else:
             raise PreventUpdate
 
@@ -236,8 +254,8 @@ def save_newreg_data(app: dash.Dash):
          State({'type': 'newval3', 'index': MATCH}, "value"),
          State({'type': 'newbirga1', 'index': MATCH}, "value"),
          State({'type': 'newbirga2', 'index': MATCH}, "value"),
-         State({'type': 'newbirga1_com', 'index': MATCH}, "value"),
-         State({'type': 'newbirga2_com', 'index': MATCH}, "value"),
+         # State({'type': 'newbirga1_com', 'index': MATCH}, "value"),
+         # State({'type': 'newbirga2_com', 'index': MATCH}, "value"),
          State({'type': 'newprofit', 'index': MATCH}, "value"),
          State({'type': 'neworder_com', 'index': MATCH}, "value"),
          State({'type': 'newper', 'index': MATCH}, "value"),
@@ -245,7 +263,7 @@ def save_newreg_data(app: dash.Dash):
     )
 
 
-    def save_output(n_clicks, n_clicks2, n_clicks3, id, val1, val2, val3, birga1, birga2,birga1_com, birga2_com, profit, order, percent):
+    def save_output(n_clicks, n_clicks2, n_clicks3, id, val1, val2, val3, birga1, birga2,profit, order, percent):
         ctx = dash.callback_context
         button_id = ctx.triggered[0]['prop_id'].split('.')
 
@@ -285,23 +303,26 @@ def save_newreg_data(app: dash.Dash):
             json_object[d['index']]['val3'] = val3
             json_object[d['index']]['birga1'] = birga1
             json_object[d['index']]['birga2'] = birga2
-            json_object[d['index']]['birga1_com'] = birga1_com
-            json_object[d['index']]['birga2_com'] = birga2_com
+            # json_object[d['index']]['birga1_com'] = birga1_com
+            # json_object[d['index']]['birga2_com'] = birga2_com
             json_object[d['index']]['profit'] = float(profit)
             json_object[d['index']]['order'] = order
             json_object[d['index']]['per'] = percent
 
             if json_object[d['index']]['avtomat'] == 'on':
-                style = {'text-align': 'center', 'max-width': '100px',
+                style = {'text-align': 'center',
                          "background-color": "palegreen",
-                         "border-radius": "20px",
-                         'font-size': '15px'}
+                               'max-width': '50px','padding': '0',
+                               'max-height': '50px',
+                               'font-size': '10px'}
                 butt = 'on'
             else:
-                style = {'text-align': 'center', 'max-width': '100px',
+                style = {'text-align': 'center',
                          "background-color": "tomato",
-                         "border-radius": "20px",
-                         'font-size': '15px'}
+                         "border-radius": "20px",'padding': '0',
+                               'max-width': '50px',
+                               'max-height': '50px',
+                               'font-size': '10px'}
                 butt = 'off'
 
             a_file = open(main_path_data + "\\new_regims.json", "w")
@@ -316,17 +337,21 @@ def save_newreg_data(app: dash.Dash):
             a_file.close()
             if json_object[d['index']]['avtomat'] == 'on':
                 json_object[d['index']]['avtomat'] = 'off'
-                style = {'text-align': 'center', 'max-width': '100px',
+                style = {'text-align': 'center',
                          "background-color": "tomato",
-                         "border-radius": "20px",
-                         'font-size': '15px'}
+                         "border-radius": "20px",'padding': '0',
+                               'max-width': '50px',
+                               'max-height': '50px',
+                               'font-size': '10px'}
                 butt = 'off'
             else:
                 json_object[d['index']]['avtomat'] = 'on'
-                style = {'text-align': 'center', 'max-width': '100px',
+                style = {'text-align': 'center',
                          "background-color": "palegreen",
-                         "border-radius": "20px",
-                         'font-size': '15px'}
+                         "border-radius": "20px",'padding': '0',
+                               'max-width': '50px',
+                               'max-height': '50px',
+                               'font-size': '10px'}
                 butt = 'on'
 
 
@@ -341,10 +366,12 @@ def save_newreg_data(app: dash.Dash):
             a_file.close()
 
             del json_object[d['index']]
-            style = {'text-align': 'center', 'max-width': '100px',
+            style = {'text-align': 'center',
                      "background-color": "tomato",
-                     "border-radius": "20px",
-                     'font-size': '15px'}
+                     "border-radius": "20px",'padding': '0',
+                               'max-width': '50px',
+                               'max-height': '50px',
+                               'font-size': '10px'}
             butt = 'DELETED'
             a_file = open(main_path_data + "\\new_regims.json", "w")
             json.dump(json_object, a_file)

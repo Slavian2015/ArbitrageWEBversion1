@@ -4,10 +4,22 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_design_kit as ddk
 import layouts
+import os
+import base64
 
 # git push heroku master
 import callbacks
 #heroku logs --tail
+
+main_path_data = os.path.abspath("./data")
+sound_filename = (main_path_data + "\\signal.mp3")  # replace with your own .mp3 file
+encoded_sound = base64.b64encode(open(sound_filename, 'rb').read())
+
+# def sound(i):
+#
+#     sound = html.Div(id='sound', children=[i])
+#     return sound
+
 
 dash_app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -21,6 +33,7 @@ dash_app.layout = html.Div([
                                             width=33,
                                             style={'text-align': 'left'},
                                                   children=[
+                                                      html.Div(id='placeholder1', style={"display": "none"}, children=layouts.sound(0)),
                                                       html.Div(id='on-content', style={'display': 'none'}),
                                                       html.Div(id='off-content', style={'display': 'none'}),
                                                       html.Button(children="TURN ON",

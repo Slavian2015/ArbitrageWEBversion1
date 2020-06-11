@@ -15,19 +15,23 @@ def regims():
     for k, v in new_regims.items():
         if v['avtomat'] == 'off':
             Turn_Avtomat_btn = html.Button(children=v['avtomat'],
-                        style={'text-align': 'center', 'max-width': '100px',
+                        style={'text-align': 'center','padding': '0',
                                "background-color": "tomato",
                                "border-radius": "20px",
-                               'font-size': '15px'},
+                               'max-width': '50px',
+                               'max-height': '50px',
+                               'font-size': '10px'},
                         id={'type': 'Turn_Avtomat_btn',
                             'index': k},
                         n_clicks=0)
         else:
             Turn_Avtomat_btn = html.Button(children=v['avtomat'],
-                                           style={'text-align': 'center', 'max-width': '100px',
+                                           style={'text-align': 'center',
                                                   "background-color": "palegreen",
                                                   "border-radius": "20px",
-                                                  'font-size': '15px'},
+                               'max-width': '50px','padding': '0',
+                               'max-height': '50px',
+                               'font-size': '10px'},
                                            id={'type': 'Turn_Avtomat_btn',
                                                'index': k},
                                            n_clicks=0)
@@ -35,10 +39,10 @@ def regims():
                                 'type': 'new_regcard',
                                 'index': k},
 
-                          style={'padding-left': '10px',
+                          style={'padding-left': '2px',
                                  'margin': '2px',
                                  'margin-left': '10px',
-                                 'padding': '5px'},
+                                 'padding': '2px'},
                           children=[
                               html.Div(id={
                                         'type': 'hidden_newreg',
@@ -48,12 +52,11 @@ def regims():
                                             style={'margin': '0',
                                                    'padding': '0'},
                                             children=[
-                                                dbc.Col(style={'width': '5%',
+                                                dbc.Col(style={'width': '4%',
                                                                'max-width': 'fit-content',
                                                                'margin': '0',
                                                                'padding': '0'},
-                                                        children=[dbc.Row(
-
+                                                        children=[
                                                             html.H2(
                                                                 id={
                                                                     'type': 'new_regim_num',
@@ -65,25 +68,39 @@ def regims():
                                                                        'vertical-align': '-webkit-baseline-middle',
                                                                        'justify-content': 'center'},
                                                                 children=k)
-                                                            ),
-
-                                                            dbc.Row(html.Button('DEL',
-                                                                        id={'type': 'Delete_NewRegim_btn',
-                                                                            'index': k},
-                                                                        n_clicks=0))
                                                         ]),
-
-
-                                                dbc.Col(style={'width':'15%',
+                                                dbc.Col(style={'width': '4%',
+                                                               'max-width': 'fit-content',
                                                                'margin': '0',
                                                                'padding': '0'},
-                                                        children=[dbc.Row(dcc.Dropdown(
+                                                        children=[html.Button('del',
+                                                                                style={'margin': '0','padding': '0',
+                                                                       'font-size': '5px',
+                                                                       'max-width': '10px',
+                                                                       'max-height': '7px',
+                                                                       "background-color": "tomato",
+                                                                                       },
+                                                                        id={'type': 'Delete_NewRegim_btn',
+                                                                            'index': k},
+                                                                        n_clicks=0)]),
+                                                dbc.Col(style={'width': '7%',
+                                                               'margin': '0',
+                                                               'padding': '0'},
+                                                        children=[dcc.Dropdown(
                                                                               id={
                                                                                   'type': 'newbirga1',
                                                                                   'index': k
                                                                               },
-                                                                              style={'width':'100%','background-color': '#fff'},
+                                                                              style={'width':'100%',
+                                                                                     'max-width': '50px',
+                                                                                      'max-height': '10px',
+                                                                                     'margin': '0',
+                                                                                     'padding': '0',
+                                                                                    'font-size': '10px',
+
+                                                                                     'background-color': '#fff'},
                                                                               placeholder="БИРЖА 1",
+                                                                              clearable=False,
                                                                               options=[
                                                                                   {
                                                                                       'label': 'alfa',
@@ -96,29 +113,43 @@ def regims():
                                                                                       'value': 'live'},
 
                                                                               ],
-                                                                              value='{}'.format(v["birga1"]))),
-                                                            dbc.Row(dbc.Input(
-                                                                        value='{}'.format(v["birga1_com"]),
-                                                                        id={'type': 'newbirga1_com',
-                                                                            'index': k},
-                                                                        placeholder="Комисия",
-                                                                        style={
-                                                                            # 'border': 'double',
-                                                                            'margin': '0',
-                                                                            'text-align': 'left',
-                                                                            'background-color': 'ivory',
-                                                                            'width': '-webkit-fill-available',
-                                                                            }))]),
-                                                dbc.Col(style={'width':'15%',
+                                                                              value='{}'.format(v["birga1"]))]),
+
+                                                # dbc.Col(style={'width':'7%',
+                                                #                'margin': '0',
+                                                #                'padding': '0'},
+                                                #         children=[dbc.Input(
+                                                #                         value='{}'.format(v["birga1_com"]),
+                                                #                         id={'type': 'newbirga1_com',
+                                                #                             'index': k},
+                                                #                         placeholder="Комисия",
+                                                #                         style={
+                                                #                             # 'border': 'double',
+                                                #                             'margin': '0',
+                                                #                             'max-width': '50px',
+                                                #                             'max-height': '50px',
+                                                #                             'text-align': 'left',
+                                                #                             'background-color': 'ivory',
+                                                #                             'width': '-webkit-fill-available',
+                                                #                             })]),
+                                                dbc.Col(style={'width': '7%',
                                                                'margin': '0',
                                                                'padding': '0'},
-                                                        children=[dbc.Row(dcc.Dropdown(
+                                                        children=[dcc.Dropdown(
                                                                               id={
                                                                                   'type': 'newbirga2',
                                                                                   'index': k
                                                                               },
-                                                                              style={'width':'100%','background-color': '#fff'},
+                                                            style={'width': '100%',
+                                                                   'max-width': '50px',
+                                                                   'max-height': '10px',
+                                                                   'margin': '0',
+                                                                   'padding': '0',
+                                                                   'font-size': '10px',
+
+                                                                   'background-color': '#fff'},
                                                                               placeholder="БИРЖА 2",
+                                                                              clearable=False,
                                                                               options=[
                                                                                   {
                                                                                       'label': 'alfa',
@@ -131,29 +162,40 @@ def regims():
                                                                                       'value': 'live'},
 
                                                                               ],
-                                                                              value='{}'.format(v["birga2"]))),
-                                                            dbc.Row(dbc.Input(
-                                                                        value='{}'.format(v["birga2_com"]),
-                                                                        id={'type': 'newbirga2_com',
-                                                                            'index': k},
-                                                                        placeholder="Комисия",
-                                                                        style={
-                                                                            # 'border': 'double',
-                                                                            'margin': '0',
-                                                                            'text-align': 'left',
-                                                                            'background-color': 'ivory',
-                                                                            'width': '-webkit-fill-available',
-                                                                            }))]),
-                                                dbc.Col(style={'width':'15%',
+                                                                              value='{}'.format(v["birga2"]))]),
+                                                # dbc.Col(style={'width':'7%',
+                                                #                'margin': '0',
+                                                #                'padding': '0'},
+                                                #         children=[dbc.Input(
+                                                #                         value='{}'.format(v["birga2_com"]),
+                                                #                         id={'type': 'newbirga2_com',
+                                                #                             'index': k},
+                                                #                         placeholder="Комисия",
+                                                #                         style={
+                                                #                             # 'border': 'double',
+                                                #                             'margin': '0',
+                                                #                             'max-width': '50px',
+                                                #                             'max-height': '50px',
+                                                #                             'text-align': 'left',
+                                                #                             'background-color': 'ivory',
+                                                #                             'width': '-webkit-fill-available',
+                                                #                             })]),
+                                                dbc.Col(style={'width': '7%',
                                                                'margin': '0',
                                                                'padding': '0'},
-                                                        children=[dbc.Row(dcc.Dropdown(
+                                                        children=[dcc.Dropdown(
                                                                                     id={
                                                                                         'type': 'newval1',
                                                                                         'index': k
                                                                                     },
-                                                                                    style={'width':'100%',
-                                                                                        'background-color': '#fff'},
+                                                            style={'width': '100%',
+                                                                   'max-width': '50px',
+                                                                   'max-height': '10px',
+                                                                   'margin': '0',
+                                                                   'padding': '0',
+                                                                   'font-size': '10px',
+                                                                   'background-color': '#fff'},
+                                                                              clearable=False,
                                                                                     options=[
                                                                                         {'label': 'BTC',
                                                                                          'value': 'BTC'},
@@ -165,105 +207,131 @@ def regims():
                                                                                          'value': 'ETH'},
                                                                                         {'label': 'PZM',
                                                                                          'value': 'PZM'},
-
                                                                                     ],
-                                                                                    value='{}'.format(v["val1"]))),
-                                                            dbc.Row(dbc.Input(
+                                                                                    value='{}'.format(v["val1"]))]),
+                                                dbc.Col(style={'width': '7%',
+                                                               'margin': '0',
+                                                               'padding': '0'},
+                                                        children=[dcc.Dropdown(
+                                                            id={
+                                                                'type': 'newval2',
+                                                                'index': k
+                                                            },
+                                                            style={'width': '100%',
+                                                                   'max-width': '50px',
+                                                                   'max-height': '10px',
+                                                                   'margin': '0',
+                                                                   'padding': '0',
+                                                                   'font-size': '10px',
+                                                                   'background-color': '#fff'},
+                                                                              clearable=False,
+                                                            options=[
+                                                                {'label': 'BTC',
+                                                                 'value': 'BTC'},
+                                                                {'label': 'USD',
+                                                                 'value': 'USD'},
+                                                                {'label': 'USDT',
+                                                                 'value': 'USDT'},
+                                                                {'label': 'ETH',
+                                                                 'value': 'ETH'},
+                                                                {'label': 'PZM',
+                                                                 'value': 'PZM'}, ],
+                                                            value='{}'.format(v["val2"]))]),
+                                                dbc.Col(style={'width': '7%',
+                                                               'margin': '0',
+                                                               'padding': '0'},
+                                                        children=[dcc.Dropdown(
+                                                            id={
+                                                                'type': 'newval3',
+                                                                'index': k
+                                                            },
+                                                            style={'width': '100%',
+                                                                   'max-width': '50px',
+                                                                   'max-height': '10px',
+                                                                   'margin': '0',
+                                                                   'padding': '0',
+                                                                   'font-size': '10px',
+                                                                   'background-color': '#fff'},
+                                                                              clearable=False,
+                                                            options=[
+                                                                {'label': 'BTC',
+                                                                 'value': 'BTC'},
+                                                                {'label': 'USD',
+                                                                 'value': 'USD'},
+                                                                {'label': 'USDT',
+                                                                 'value': 'USDT'},
+                                                                {'label': 'ETH',
+                                                                 'value': 'ETH'},
+                                                                {'label': 'PZM',
+                                                                 'value': 'PZM'},
+
+                                                            ],
+                                                            value='{}'.format(v["val3"]))]),
+                                                dbc.Col(style={'width':'7%',
+                                                               'margin': '0',
+                                                               'padding': '0'},
+                                                        children=[dbc.Input(
                                                                         value='{}'.format(v["order"]),
                                                                         id={'type': 'neworder_com',
                                                                             'index': k},
                                                                         placeholder="Минималка",
                                                                         style={
-                                                                            # 'border': 'double',
                                                                             'margin': '0',
+                                                                            'font-size': '14px',
+                                                                            'max-width': '50px',
+                                                                            'max-height': '50px',
                                                                             'text-align': 'left',
                                                                             'background-color': 'ivory',
                                                                             'width': '-webkit-fill-available',
-                                                                            }))]),
-                                                dbc.Col(style={'width':'15%',
+                                                                            })]),
+                                                dbc.Col(style={'width':'7%',
                                                                'margin': '0',
                                                                'padding': '0'},
-                                                        children=[dbc.Row(dcc.Dropdown(
-                                                                                    id={
-                                                                                        'type': 'newval2',
-                                                                                        'index': k
-                                                                                    },
-                                                                                    style={'width':'100%',
-                                                                                        'background-color': '#fff'},
-                                                                                    options=[
-                                                                                        {'label': 'BTC',
-                                                                                         'value': 'BTC'},
-                                                                                        {'label': 'USD',
-                                                                                         'value': 'USD'},
-                                                                                        {'label': 'USDT',
-                                                                                         'value': 'USDT'},
-                                                                                        {'label': 'ETH',
-                                                                                         'value': 'ETH'},
-                                                                                        {'label': 'PZM',
-                                                                                         'value': 'PZM'},
-
-                                                                                    ],
-                                                                                    value='{}'.format(v["val2"]))),
-                                                            dbc.Row(dbc.Input(
+                                                        children=[dbc.Input(
                                                                         value='{}'.format(v["per"]),
                                                                         id={'type': 'newper',
                                                                             'index': k},
-                                                                        placeholder="Минималка",
+                                                                        placeholder="% ордера",
                                                                         style={
-                                                                            # 'border': 'double',
                                                                             'margin': '0',
+                                                                            'font-size': '14px',
+                                                                            'max-width': '50px',
+                                                                            'max-height': '50px',
                                                                             'text-align': 'left',
                                                                             'background-color': 'ivory',
                                                                             'width': '-webkit-fill-available',
-                                                                            }))]),
-                                                dbc.Col(style={'width':'15%',
+                                                                            })]),
+                                                dbc.Col(style={'width':'7%',
                                                                'margin': '0',
                                                                'padding': '0'},
-                                                        children=[dbc.Row(dcc.Dropdown(
-                                                                                    id={
-                                                                                        'type': 'newval3',
-                                                                                        'index': k
-                                                                                    },
-                                                                                    style={'width':'100%',
-                                                                                        'background-color': '#fff'},
-                                                                                    options=[
-                                                                                        {'label': 'BTC',
-                                                                                         'value': 'BTC'},
-                                                                                        {'label': 'USD',
-                                                                                         'value': 'USD'},
-                                                                                        {'label': 'USDT',
-                                                                                         'value': 'USDT'},
-                                                                                        {'label': 'ETH',
-                                                                                         'value': 'ETH'},
-                                                                                        {'label': 'PZM',
-                                                                                         'value': 'PZM'},
-
-                                                                                    ],
-                                                                                    value='{}'.format(v["val3"]))),
-                                                            dbc.Row(dbc.Input(
+                                                        children=[dbc.Input(
                                                                         value='{}'.format(v["profit"]),
                                                                         id={'type': 'newprofit',
                                                                             'index': k},
                                                                         placeholder=v['profit'],
                                                                         style={
-                                                                            # 'border': 'double',
                                                                             'margin': '0',
+                                                                            'max-width': '50px',
+                                                                            'max-height': '50px',
+                                                                            'font-size': '14px',
                                                                             'text-align': 'left',
                                                                             'background-color': 'ivory',
                                                                             'width': '-webkit-fill-available',
-                                                                            }))]),
-                                                dbc.Col(style={'width':'20%',
+                                                                            })]),
+                                                dbc.Col(style={'width': '13%',
                                                                'margin': '0',
                                                                'padding': '0'},
-                                                        children=[
-                                                            dbc.Row(
-                                                                html.Button('SAVE',
+                                                        children=[html.Button('save',style={
+                                                                            'margin': '0','padding': '0',
+                                                                            'max-width': '45px',
+                                                                            'max-height': '40px'},
                                                                               id={'type': 'Save_NewRegim_btn',
                                                                                   'index': k},
-                                                                              n_clicks=0)),
-                                                            dbc.Row(Turn_Avtomat_btn)
-
-                                                        ])])
+                                                                              n_clicks=0)]),
+                                                dbc.Col(style={'width':'13%',
+                                                               'margin': '0',
+                                                               'padding': '0'},
+                                                        children=[Turn_Avtomat_btn])])
 
 
 
