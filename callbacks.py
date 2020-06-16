@@ -8,6 +8,9 @@ import pandas as pd
 import base64
 import MAIN_TAB
 import refBalance
+import sys
+import logging
+import logging.config
 import dash_html_components as html
 # import dash_design_kit as ddk
 import layouts
@@ -70,9 +73,11 @@ def refresh(app: dash.Dash):
 
         # print(vilki)
 
+
+
         vilki['profit'] = vilki['profit'].map('{:,.2f}%'.format)
-        vilki['kurs1'] = vilki['kurs1'].map('{:,.7f}'.format)
-        vilki['kurs2'] = vilki['kurs2'].map('{:,.7f}'.format)
+        vilki['kurs1'] = vilki['kurs1'].map('{:,.8f}'.format)
+        vilki['kurs2'] = vilki['kurs2'].map('{:,.8f}'.format)
         vilki['Vol1'] = vilki['Vol1'].map('{:,.6f}'.format)
         vilki['Vol2'] = vilki['Vol2'].map('{:,.6f}'.format)
         vilki['Vol3'] = vilki['Vol3'].map('{:,.6f}'.format)
@@ -90,6 +95,40 @@ def refresh(app: dash.Dash):
         final2['rates_x'] = final2['rates_x'].map('{:,.6f}'.format)
         final2['rates_y'] = final2['rates_y'].map('{:,.6f}'.format)
         final2['perc'] = final2['perc'].map('{:,.2f}%'.format)
+
+
+        # ================== Logger ================================
+        def Logger(file_name):
+            formatter = logging.Formatter(fmt='%(asctime)s %(module)s,line: %(lineno)d %(levelname)8s | %(message)s',
+                                          datefmt='%Y/%m/%d %H:%M:%S')  # %I:%M:%S %p AM|PM format
+            logging.basicConfig(filename='%s.log' % (file_name),
+                                format='%(asctime)s %(module)s,line: %(lineno)d %(levelname)8s | %(message)s',
+                                datefmt='%Y/%m/%d %H:%M:%S', filemode='w', level=logging.INFO)
+            log_obj = logging.getLogger()
+            log_obj.setLevel(logging.DEBUG)
+            # log_obj = logging.getLogger().addHandler(logging.StreamHandler())
+
+            # console printer
+            screen_handler = logging.StreamHandler(stream=sys.stdout)  # stream=sys.stdout is similar to normal print
+            screen_handler.setFormatter(formatter)
+            logging.getLogger().addHandler(screen_handler)
+
+            log_obj.info("Logger object created successfully..")
+            return log_obj
+
+        # =======================================================
+        file_name = 'SLAVA_LOGS'
+        log_obj = Logger(file_name)
+        logging.basicConfig(level=logging.INFO)
+        # logging.basicConfig(level=logging.DEBUG)
+        logger = logging.getLogger(__name__)
+        logger.info('Start reading database')
+        # read database here
+        records = {'john': 55, 'tom': 66}
+        logger.debug('Records: %s', records)
+        logger.info('Updating records ...')
+        # update records here
+        logger.info('Finish updating records')
 
 
 
