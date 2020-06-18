@@ -70,6 +70,7 @@ dash_app.layout = html.Div([
                                             style={'text-align': 'right'},
                                                   children=[
                                                       dcc.Link('ГЛАВНАЯ', style={'color': 'azure', 'margin': '10px'}, href='/'),
+                                                      dcc.Link('REGIM 2', style={'color': 'azure', 'margin': '10px'}, href='/regim2'),
                                                       dcc.Link('КЛЮЧИ', style={'color': 'azure', 'margin': '10px'}, href='/keys')])]),
                          html.Div(id='page-content'),
 
@@ -87,6 +88,8 @@ def display_page(pathname):
          return layouts.serve_layout()
     elif pathname == '/keys':
          return layouts.tab_keys()
+    elif pathname == '/regim2':
+         return layouts.serve_layout2()
     else:
         return '404'
 

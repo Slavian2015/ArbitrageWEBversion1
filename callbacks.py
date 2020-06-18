@@ -92,44 +92,9 @@ def refresh(app: dash.Dash):
         final2['start'] = final2['start'].map('{:,.6f}'.format)
         final2['step'] = final2['step'].map('{:,.6f}'.format)
         final2['back'] = final2['back'].map('{:,.6f}'.format)
-        final2['rates_x'] = final2['rates_x'].map('{:,.6f}'.format)
-        final2['rates_y'] = final2['rates_y'].map('{:,.6f}'.format)
+        final2['rates_x'] = final2['rates_x'].map('{:,.8f}'.format)
+        final2['rates_y'] = final2['rates_y'].map('{:,.8f}'.format)
         final2['perc'] = final2['perc'].map('{:,.2f}%'.format)
-
-
-        # ================== Logger ================================
-        def Logger(file_name):
-            formatter = logging.Formatter(fmt='%(asctime)s %(module)s,line: %(lineno)d %(levelname)8s | %(message)s',
-                                          datefmt='%Y/%m/%d %H:%M:%S')  # %I:%M:%S %p AM|PM format
-            logging.basicConfig(filename='%s.log' % (file_name),
-                                format='%(asctime)s %(module)s,line: %(lineno)d %(levelname)8s | %(message)s',
-                                datefmt='%Y/%m/%d %H:%M:%S', filemode='w', level=logging.INFO)
-            log_obj = logging.getLogger()
-            log_obj.setLevel(logging.DEBUG)
-            # log_obj = logging.getLogger().addHandler(logging.StreamHandler())
-
-            # console printer
-            screen_handler = logging.StreamHandler(stream=sys.stdout)  # stream=sys.stdout is similar to normal print
-            screen_handler.setFormatter(formatter)
-            logging.getLogger().addHandler(screen_handler)
-
-            log_obj.info("Logger object created successfully..")
-            return log_obj
-
-        # =======================================================
-        file_name = 'SLAVA_LOGS'
-        log_obj = Logger(file_name)
-        logging.basicConfig(level=logging.INFO)
-        # logging.basicConfig(level=logging.DEBUG)
-        logger = logging.getLogger(__name__)
-        logger.info('Start reading database')
-        # read database here
-        records = {'john': 55, 'tom': 66}
-        logger.debug('Records: %s', records)
-        logger.info('Updating records ...')
-        # update records here
-        logger.info('Finish updating records')
-
 
 
         if button_id[0] == 'interval':
@@ -140,6 +105,73 @@ def refresh(app: dash.Dash):
             else:
                 print(" ##########   2  ################")
                 return vilki.to_dict('records'), valuta.to_dict('records'), final2.to_dict('records'), layouts.sound(1)
+
+        else:
+            raise PreventUpdate
+
+def refresh2(app: dash.Dash):
+    ###############################    RESTART ALL FUNCTIONS     ########################################
+    @app.callback([Output('vilki2_table', 'data'),
+                   Output('vilki2_all_table', 'data'),
+                   ],
+                  [
+                      Input('interval2', 'n_intervals'),
+                  ],
+                  [State('newval1_btn_reg2', "value"),
+                   State('newval2_btn_reg2', "value"),
+                   State('newval3_btn_reg2', "value"),
+                   State('newbirga1_btn_reg2', "value"),
+                   State('newbirga2_btn_reg2', "value"),
+                   State('newbirga1_com_btn_reg2', "value"),
+                   State('newbirga2_com_btn_reg2', "value"),
+                   State('newprofit_btn_reg2', "value"),
+                   State('neworder_com_btn_reg2', "value"),
+                   State('newper_btn_reg2', "value"),
+                   ]
+                  )
+    def trigger_by_modify(n_clicks, val1, val2, val3, birga1, birga2,birga1_com, birga2_com, profit, order, percent):
+
+        ctx = dash.callback_context
+        button_id = ctx.triggered[0]['prop_id'].split('.')
+        # print('button_id :', button_id[0])
+        # # print('n :', n)
+        # print('n_clicks :',  n_clicks)
+
+
+        try:
+            vilki = pd.read_csv(main_path_data + "\\vilki2.csv")
+        except Exception as e:
+            vilki = pd.read_csv(main_path_data + "\\vilki2.csv")
+            pass
+        final2 = pd.read_csv(main_path_data + "\\vilki2_all.csv")
+
+        # print(vilki)
+
+
+        #
+        # vilki['profit'] = vilki['profit'].map('{:,.2f}%'.format)
+        # vilki['kurs1'] = vilki['kurs1'].map('{:,.8f}'.format)
+        # vilki['kurs2'] = vilki['kurs2'].map('{:,.8f}'.format)
+        # vilki['Vol1'] = vilki['Vol1'].map('{:,.6f}'.format)
+        # vilki['Vol2'] = vilki['Vol2'].map('{:,.6f}'.format)
+        # vilki['Vol3'] = vilki['Vol3'].map('{:,.6f}'.format)
+        # vilki['Vol4'] = vilki['Vol4'].map('{:,.6f}'.format)
+        #
+        #
+        # final2['profit'] = final2['profit'].map('{:,.6f}'.format)
+        # final2['start'] = final2['start'].map('{:,.6f}'.format)
+        # final2['step'] = final2['step'].map('{:,.6f}'.format)
+        # final2['back'] = final2['back'].map('{:,.6f}'.format)
+        # final2['rates_x'] = final2['rates_x'].map('{:,.8f}'.format)
+        # final2['rates_y'] = final2['rates_y'].map('{:,.8f}'.format)
+        # final2['perc'] = final2['perc'].map('{:,.2f}%'.format)
+
+
+        if button_id[0] == 'interval2':
+            print(" ##########   REFRESH  ################")
+
+            return vilki.to_dict('records'),final2.to_dict('records')
+
 
         else:
             raise PreventUpdate
@@ -194,8 +226,8 @@ def creat_reg(app: dash.Dash):
 
         ctx = dash.callback_context
         button_id = ctx.triggered[0]['prop_id'].split('.')
-        # print('button_id :', button_id[0])
-        # print('n_clicks :',  n_clicks)
+        print('button_id  1:', button_id[0])
+        print('n_clicks 1 :',  n_clicks)
 
         if button_id[0] == 'Create_NewRegim_btn':
             if n_clicks > 0:
@@ -275,6 +307,110 @@ def creat_reg(app: dash.Dash):
             json.dump(data, f)
             f.close()
             list_group = [i for i in MAIN_TAB.regims()]
+            return [list_group]
+        else:
+            raise PreventUpdate
+def creat_reg2(app: dash.Dash):
+
+    @app.callback([Output('listcardreg2', 'children')],
+        [Input('Create_NewRegim_btn_reg2', 'n_clicks'),
+         Input('On_Avtomat_btn', 'n_clicks'),
+         Input('Off_Avtomat_btn', 'n_clicks')],
+                  [State('newval1_btn_reg2', "value"),
+                   State('newval2_btn_reg2', "value"),
+                   State('newval3_btn_reg2', "value"),
+                   State('newbirga1_btn_reg2', "value"),
+                   State('newbirga2_btn_reg2', "value"),
+                   State('newbirga1_com_btn_reg2', "value"),
+                   State('newbirga2_com_btn_reg2', "value"),
+                   State('newprofit_btn_reg2', "value"),
+                   State('neworder_com_btn_reg2', "value"),
+                   State('newper_btn_reg2', "value"),
+                   ])
+
+    def create(n_clicks, n_clicks2,n_clicks3, val1, val2, val3, birga1, birga2,birga1_com, birga2_com, profit, order, percent):
+
+        ctx = dash.callback_context
+        button_id = ctx.triggered[0]['prop_id'].split('.')
+
+        if button_id[0] == 'Create_NewRegim_btn_reg2':
+            if n_clicks > 0:
+                print('\n', '\n',"##########################  NEW REGIM:", '\n', '\n')
+                # with open(main_path_data + "\\new_regims.json", "r") as file:
+                file = open(main_path_data + "\\regims2.json", "r")
+                param = []
+                data = json.load(file)
+                file.close()
+                for k, v in data.items():
+                    param.append(k)
+
+                if not param:
+                    next_id = 1
+                    data[next_id] = {"birga1": birga1,
+                     "birga2": birga2,
+                     "val1": val1,
+                     "val2": val2,
+                     "val3": val3,
+                     "birga1_com": birga1_com,
+                     "birga2_com": birga2_com,
+                     "profit": profit,
+                     "order": order,
+                     "per": percent,
+                     "avtomat": "off"
+                     }
+                    f = open(main_path_data + "\\regims2.json", "w")
+                    json.dump(data, f)
+                    f.close()
+                    list_group = [i for i in MAIN_TAB.regims2()]
+                    return [list_group]
+                else:
+                    next_id = str(int(param[-1]) + 1)
+                    data[next_id] = {"birga1": birga1,
+                     "birga2": birga2,
+                     "val1": val1,
+                     "val2": val2,
+                     "val3": val3,
+                     "birga1_com": birga1_com,
+                     "birga2_com": birga2_com,
+                     "profit": profit,
+                     "order": order,
+                     "per": percent,
+                     "avtomat": "off"
+                     }
+                    f = open(main_path_data + "\\regims2.json", "w")
+                    json.dump(data, f)
+                    f.close()
+                    list_group = [i for i in MAIN_TAB.regims2()]
+                    return [list_group]
+            else:
+                raise PreventUpdate
+        elif button_id[0] == 'On_Avtomat_btn':
+            print("AVTOMAT ON")
+            # with open(main_path_data + "\\new_regims.json", "r") as file:
+            file = open(main_path_data + "\\regims2.json", "r")
+            data = json.load(file)
+            file.close()
+            for k, v in data.items():
+                v['avtomat'] = 'on'
+
+            f = open(main_path_data + "\\regims2.json", "w")
+            json.dump(data, f)
+            f.close()
+            list_group = [i for i in MAIN_TAB.regims2()]
+            return [list_group]
+        elif button_id[0] == 'Off_Avtomat_btn':
+            print("AVTOMAT OFF")
+            # with open(main_path_data + "\\new_regims.json", "r") as file:
+            file = open(main_path_data + "\\regims2.json", "r")
+            data = json.load(file)
+            file.close()
+            for k, v in data.items():
+                v['avtomat'] = 'off'
+
+            f = open(main_path_data + "\\regims2.json", "w")
+            json.dump(data, f)
+            f.close()
+            list_group = [i for i in MAIN_TAB.regims2()]
             return [list_group]
         else:
             raise PreventUpdate
@@ -418,6 +554,144 @@ def save_newreg_data(app: dash.Dash):
             return [""], style, butt
         else:
             raise dash.exceptions.PreventUpdate
+def save_newreg2_data(app: dash.Dash):
+    @app.callback(
+        [Output({'type': 'hidden_newreg_reg2', 'index': MATCH}, 'children'),
+         Output({'type': 'Turn_Avtomat_btn_reg2', 'index': MATCH}, 'style'),
+         Output({'type': 'Turn_Avtomat_btn_reg2', 'index': MATCH}, 'children')],
+        [Input({'type': 'Save_NewRegim_btn_reg2', 'index': MATCH}, 'n_clicks'),
+         Input({'type': 'Turn_Avtomat_btn_reg2', 'index': MATCH}, 'n_clicks'),
+         Input({'type': 'Delete_NewRegim_btn_reg2', 'index': MATCH}, 'n_clicks')],
+        [State({'type': 'Save_NewRegim_btn_reg2', 'index': MATCH}, 'id'),
+         State({'type': 'newval1_reg2', 'index': MATCH}, "value"),
+         State({'type': 'newval2_reg2', 'index': MATCH}, "value"),
+         State({'type': 'newval3_reg2', 'index': MATCH}, "value"),
+         State({'type': 'newbirga1_reg2', 'index': MATCH}, "value"),
+         State({'type': 'newbirga2_reg2', 'index': MATCH}, "value"),
+         # State({'type': 'newbirga1_com', 'index': MATCH}, "value"),
+         # State({'type': 'newbirga2_com', 'index': MATCH}, "value"),
+         State({'type': 'newprofit_reg2', 'index': MATCH}, "value"),
+         State({'type': 'neworder_com_reg2', 'index': MATCH}, "value"),
+         State({'type': 'newper_reg2', 'index': MATCH}, "value"),
+         ]
+    )
+
+
+    def save_output(n_clicks, n_clicks2, n_clicks3, id, val1, val2, val3, birga1, birga2,profit, order, percent):
+        ctx = dash.callback_context
+        button_id = ctx.triggered[0]['prop_id'].split('.')
+
+        if not ctx.triggered:
+            raise dash.exceptions.PreventUpdate
+        elif n_clicks> 0 or n_clicks2> 0 or n_clicks3> 0:
+            pass
+        else:
+            raise dash.exceptions.PreventUpdate
+
+
+        bb = button_id[0]
+        d = json.loads(bb)
+
+
+        if order is None:
+            order = ""
+        else:
+            order = order
+
+        if percent is None:
+            percent = ""
+        else:
+            percent = percent
+
+
+
+        if d['type'] == 'Save_NewRegim_btn_reg2':
+            print("#########     SAVED    ##############")
+            a_file = open(main_path_data + "\\regims2.json", "r")
+            json_object = json.load(a_file)
+            a_file.close()
+            json_object[d['index']]['val1'] = val1
+            json_object[d['index']]['val2'] = val2
+            json_object[d['index']]['val3'] = val3
+            json_object[d['index']]['birga1'] = birga1
+            json_object[d['index']]['birga2'] = birga2
+            # json_object[d['index']]['birga1_com'] = birga1_com
+            # json_object[d['index']]['birga2_com'] = birga2_com
+            json_object[d['index']]['profit'] = float(profit)
+            json_object[d['index']]['order'] = order
+            json_object[d['index']]['per'] = percent
+
+            if json_object[d['index']]['avtomat'] == 'on':
+                style = {'text-align': 'center',
+                         "background-color": "palegreen",
+                               'max-width': '50px','padding': '0',
+                               'max-height': '50px',
+                               'font-size': '10px'}
+                butt = 'on'
+            else:
+                style = {'text-align': 'center',
+                         "background-color": "tomato",
+                         "border-radius": "20px",'padding': '0',
+                               'max-width': '50px',
+                               'max-height': '50px',
+                               'font-size': '10px'}
+                butt = 'off'
+
+            a_file = open(main_path_data + "\\regims2.json", "w")
+            json.dump(json_object, a_file)
+            a_file.close()
+
+            return [""], style, butt
+        elif d['type'] == 'Turn_Avtomat_btn_reg2':
+            print("#########     AVTOMAT  2  ##############")
+            a_file = open(main_path_data + "\\regims2.json", "r")
+            json_object = json.load(a_file)
+            a_file.close()
+            if json_object[d['index']]['avtomat'] == 'on':
+                json_object[d['index']]['avtomat'] = 'off'
+                style = {'text-align': 'center',
+                         "background-color": "tomato",
+                         "border-radius": "20px",'padding': '0',
+                               'max-width': '50px',
+                               'max-height': '50px',
+                               'font-size': '10px'}
+                butt = 'off'
+            else:
+                json_object[d['index']]['avtomat'] = 'on'
+                style = {'text-align': 'center',
+                         "background-color": "palegreen",
+                         "border-radius": "20px",'padding': '0',
+                               'max-width': '50px',
+                               'max-height': '50px',
+                               'font-size': '10px'}
+                butt = 'on'
+
+
+            a_file = open(main_path_data + "\\regims2.json", "w")
+            json.dump(json_object, a_file)
+            a_file.close()
+            return [""], style, butt
+        elif d['type'] == 'Delete_NewRegim_btn_reg2':
+            print("#########     DELETED    ##############")
+            a_file = open(main_path_data + "\\regims2.json", "r")
+            json_object = json.load(a_file)
+            a_file.close()
+
+            del json_object[d['index']]
+            style = {'text-align': 'center',
+                     "background-color": "tomato",
+                     "border-radius": "20px",'padding': '0',
+                               'max-width': '50px',
+                               'max-height': '50px',
+                               'font-size': '10px'}
+            butt = 'DELETED'
+            a_file = open(main_path_data + "\\regims2.json", "w")
+            json.dump(json_object, a_file)
+            a_file.close()
+            return [""], style, butt
+        else:
+            raise dash.exceptions.PreventUpdate
+
 
 def ref_balance(app: dash.Dash):
     @app.callback(
@@ -1795,9 +2069,12 @@ def ref_balance(app: dash.Dash):
 #                     return [reponse_b1]
 
 refresh(dash_app)
+refresh2(dash_app)
 save_key_data(dash_app)
 creat_reg(dash_app)
+creat_reg2(dash_app)
 save_newreg_data(dash_app)
+save_newreg2_data(dash_app)
 ref_balance(dash_app)
 
 
